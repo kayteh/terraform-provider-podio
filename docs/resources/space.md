@@ -3,27 +3,24 @@
 page_title: "podio_space Resource - terraform-provider-podio"
 subcategory: ""
 description: |-
-  Manage a Space/Workspace within Podio. See https://developers.podio.com/doc/spaces/ for more information.
-          Caveats:
-          - Deleting may be expected to fail due to API trust limits. Set *ignore_delete_errors* to true to ignore errors.
+  A space/workspace within a Podio organization.
 ---
 
 # podio_space (Resource)
 
-Manage a Space/Workspace within Podio. See https://developers.podio.com/doc/spaces/ for more information.
-		
-			Caveats:
-			- Deleting may be expected to fail due to API trust limits. Set *ignore_delete_errors* to true to ignore errors.
+A space/workspace within a Podio organization.
 
 ## Example Usage
 
 ```terraform
+data "podio_organization" "my_org" {
+  url_label = "my-org"
+}
+
 resource "podio_space" "kanban_board" {
-  org_id  = 1000
+  org_id  = data.podio_organization.my_org.org_id
   name    = "Team Kanban"
   privacy = "closed"
-
-  ignore_delete_errors = true
 }
 ```
 
@@ -32,21 +29,19 @@ resource "podio_space" "kanban_board" {
 
 ### Required
 
-- `name` (String) Name of the space. Changing this does not update the space URL.
-- `org_id` (Number) The ID of the Organization the Space belongs to. Changing this forces a new resource to be created.
+- `name` (String) Name of the space. Changing this does not affect the ID or URL of the space.
+- `org_id` (Number) ID of the organization
 
 ### Optional
 
 - `auto_join` (Boolean) If true, new employees automatically join this space. Defaults to `false`
-- `id` (String) The ID of this resource.
-- `ignore_delete_errors` (Boolean) If true, errors are ignored when deleting a space. Defaults to `false`
 - `post_on_new_app` (Boolean) If true, new apps are posted as a status update to this space. Defaults to `false`
 - `post_on_new_member` (Boolean) If true, new members are posted as a status update to this space. Defaults to `false`
-- `privacy` (String) Privacy of the space, one of `open`, `closed`. Defaults to `closed`
+- `privacy` (String) Privacy of the space, one of: `open` or `closed`. Defaults to `closed`.
 
 ### Read-Only
 
+- `space_id` (Number) ID of the space
 - `url` (String) URL of the space
-- `url_label` (String) URL label/slug of the space
 
 

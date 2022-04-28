@@ -24,10 +24,12 @@ func (t organizationDataSourceType) GetSchema(ctx context.Context) (tfsdk.Schema
 			"url_label": {
 				Type:        types.StringType,
 				Description: "The URL label/slug for the organization, e.g. the `citrix` part of `https://podio.com/citrix`. Mutually exclusive with `org_id`.",
+				Optional:    true,
 			},
 			"org_id": {
 				Type:        types.Int64Type,
 				Description: "The numeric ID of the organization. Mutually exclusive with `url_label`.",
+				Optional:    true,
 			},
 			"url": {
 				Description: "URL of the Podio organization",
@@ -71,7 +73,7 @@ func (d organizationDataSource) Read(ctx context.Context, req tfsdk.ReadDataSour
 
 	// Error if both `url_label` and `org_id` are set
 	if !data.URLLabel.Null && !data.OrgID.Null {
-		resp.Diagnostics.AddAttributeError("Ambiguous search pattern", "Only set one of `url_label` or `org_id`, not both.")
+		resp.Diagnostics.AddError("Ambiguous search pattern", "Only set one of `url_label` or `org_id`, not both.")
 		return
 	}
 
@@ -80,7 +82,7 @@ func (d organizationDataSource) Read(ctx context.Context, req tfsdk.ReadDataSour
 	} else if !data.URLLabel.Null {
 		org, err = d.provider.client.GetOrganization(string(data.OrgID.Value))
 	} else {
-		resp.Diagnostics.AddAttributeError("No URL or Org ID specified", "Either `url_label` or `org_id` must be specified")
+		resp.Diagnostics.AddError("No URL or Org ID specified", "Either `url_label` or `org_id` must be specified")
 		return
 	}
 

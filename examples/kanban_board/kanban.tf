@@ -1,16 +1,28 @@
-provider "podio" {
+terraform {
+  required_providers {
+    podio = {
+      source  = "kayteh/podio"
+      version = ">=1.0.0"
+    }
+  }
 }
 
-variable "org_slug" {
-  type         = string
-  ddescription = "Human-readable Org name/slug. The `citrix` in https://podio.com/citrix/hello-world"
+provider "podio" {
+  client_id     = var.client_id
+  client_secret = var.client_secret
+  username      = var.username
+  password      = var.password
 }
 
 data "podio_organization" "my_org" {
-  slug = var.org_slug
+  url_label = var.org_slug
 }
 
 resource "podio_space" "kanban" {
-  name   = "Team Kanban"
-  org_id = data.podio_organization.id
+  name   = "My Cool Kanban Workspace"
+  org_id = data.podio_organization.my_org.org_id
+}
+
+output "space_url" {
+  value = podio_space.kanban.url
 }

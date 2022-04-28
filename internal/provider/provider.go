@@ -107,7 +107,8 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 				MarkdownDescription: "Username for Podio",
 				Type:                types.StringType,
 				Sensitive:           true,
-				Required:            true,
+				Optional:            true,
+				Computed:            true,
 			},
 			"password": {
 				MarkdownDescription: "Password for Podio",

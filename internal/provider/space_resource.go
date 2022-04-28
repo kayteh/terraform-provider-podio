@@ -53,21 +53,25 @@ func (t spaceResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 				MarkdownDescription: "Privacy of the space, one of: `open` or `closed`. Defaults to `closed`.",
 				Type:                types.StringType,
 				Optional:            true,
+				Computed:            true,
 			},
 			"auto_join": {
 				MarkdownDescription: "If true, new employees automatically join this space. Defaults to `false`",
 				Type:                types.BoolType,
 				Optional:            true,
+				Computed:            true,
 			},
 			"post_on_new_app": {
 				MarkdownDescription: "If true, new apps are posted as a status update to this space. Defaults to `false`",
 				Type:                types.BoolType,
 				Optional:            true,
+				Computed:            true,
 			},
 			"post_on_new_member": {
 				MarkdownDescription: "If true, new members are posted as a status update to this space. Defaults to `false`",
 				Type:                types.BoolType,
 				Optional:            true,
+				Computed:            true,
 			},
 		},
 	}, nil
@@ -145,7 +149,7 @@ func (r spaceResource) Read(ctx context.Context, req tfsdk.ReadResourceRequest, 
 		return
 	}
 
-	space, err := r.provider.client.GetSpace(string(data.SpaceID.Value))
+	space, err := r.provider.client.GetSpace(fmt.Sprintf("%d", data.SpaceID.Value))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to get space, got error: %s", err))
 		return
@@ -174,7 +178,7 @@ func (r spaceResource) Update(ctx context.Context, req tfsdk.UpdateResourceReque
 		return
 	}
 
-	space, err := r.provider.client.UpdateSpace(string(data.SpaceID.Value), podio.CreateSpaceParams{
+	space, err := r.provider.client.UpdateSpace(fmt.Sprintf("%d", data.SpaceID.Value), podio.CreateSpaceParams{
 		Name:            data.Name.Value,
 		Privacy:         data.Privacy.Value,
 		AutoJoin:        data.AutoJoin.Value,
@@ -210,7 +214,7 @@ func (r spaceResource) Delete(ctx context.Context, req tfsdk.DeleteResourceReque
 		return
 	}
 
-	err := r.provider.client.DeleteSpace(string(data.SpaceID.Value))
+	err := r.provider.client.DeleteSpace(fmt.Sprintf("%d", data.SpaceID.Value))
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete space, got error: %s", err))
 		return

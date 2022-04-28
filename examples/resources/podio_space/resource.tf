@@ -1,5 +1,5 @@
 data "podio_organization" "my_org" {
-    url_label = "my-org"
+  url_label = "my-org"
 }
 
 resource "podio_space" "kanban_board" {
