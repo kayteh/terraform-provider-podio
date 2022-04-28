@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"log"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/kayteh/terraform-provider-podio/internal/provider"
 )
 
@@ -27,18 +29,21 @@ var (
 )
 
 func main() {
-	var debugMode bool
+	var debug bool
 
-	flag.BoolVar(&debugMode, "debug", false, "set to true to run the provider with support for debuggers like delve")
+	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
 
-	opts := &plugin.ServeOpts{
-		Debug: debugMode,
+	opts := tfsdk.ServeOpts{
+		Debug: debug,
 
-		ProviderAddr: "registry.terraform.io/kayteh/podio",
-
-		ProviderFunc: provider.New(version),
+		// TODO: Update this string with the published name of your provider.
+		Name: "registry.terraform.io/kayteh/podio",
 	}
 
-	plugin.Serve(opts)
+	err := tfsdk.Serve(context.Background(), provider.New(version), opts)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
