@@ -10,3 +10,7 @@ Set the following environment variables:
 - `PODIO_PASSWORD` - Your account's password
 
 You will be asked for your Org slug, this is the "citrix" in "podio.com/citrix/hello-world", have it ready.
+
+## Local development testing:
+
+Run `make` from this folder. It'll setup the local provider source, and terraform init.

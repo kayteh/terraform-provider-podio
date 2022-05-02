@@ -55,7 +55,7 @@ func (t spaceResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
-				Validators: []tfsdk.Validator{
+				Validators: []tfsdk.AttributeValidator{
 					validators.StringInSliceValidator{"open", "closed"},
 				},
 			},

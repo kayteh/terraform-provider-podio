@@ -11,12 +11,12 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ tfsdk.ResourceType = appFieldType{}
+var _ tfsdk.ResourceType = appFieldResourceType{}
 var _ tfsdk.Resource = appField{}
 
-type appFieldType struct{}
+type appFieldResourceType struct{}
 
-func (t appFieldType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (t appFieldResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		MarkdownDescription: "A field within an app",
 
@@ -24,7 +24,7 @@ func (t appFieldType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnos
 	}, nil
 }
 
-func (t appFieldType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
+func (t appFieldResourceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
 	provider, diags := convertProviderType(in)
 
 	return appField{

@@ -10,6 +10,8 @@ testacc:
 
 .PHONY: build
 build:
+	go fmt ./...
 	mkdir -p ${LOCAL_PROVIDER_PATH}
 	go build -v -o ${LOCAL_PROVIDER_PATH}/terraform-provider-podio_v${VERSION}
+	cp ${LOCAL_PROVIDER_PATH}/terraform-provider-podio_v${VERSION} ${LOCAL_PROVIDER_PATH}/terraform-provider-podio_${VERSION}
 	@echo "Built podio provider v${VERSION} for $$(go env GOOS)_$$(go env GOARCH) at ${LOCAL_PROVIDER_PATH}/terraform-provider-podio_v${VERSION}"
