@@ -79,8 +79,8 @@ func (d organizationDataSource) Read(ctx context.Context, req tfsdk.ReadDataSour
 
 	if !data.URLLabel.Null {
 		org, err = d.provider.client.GetOrganizationBySlug(data.URLLabel.Value)
-	} else if !data.URLLabel.Null {
-		org, err = d.provider.client.GetOrganization(string(data.OrgID.Value))
+	} else if !data.OrgID.Null {
+		org, err = d.provider.client.GetOrganization(fmt.Sprintf("%d", data.OrgID.Value))
 	} else {
 		resp.Diagnostics.AddError("No URL or Org ID specified", "Either `url_label` or `org_id` must be specified")
 		return
