@@ -17,7 +17,7 @@ This Terraform provider needs to:
 
 ## Current Target: MMF1: Kanban
 
-- [ ] Workspace creation
+- [x] Workspace creation
 - [ ] App creation
 - [ ] Template creation (Text + Category)
 - [ ] Item creation

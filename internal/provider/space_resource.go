@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/kayteh/podio-go"
+	"github.com/kayteh/terraform-provider-podio/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
@@ -54,6 +55,9 @@ func (t spaceResourceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 				Type:                types.StringType,
 				Optional:            true,
 				Computed:            true,
+				Validators: []tfsdk.Validator{
+					validators.StringInSliceValidator{"open", "closed"},
+				},
 			},
 			"auto_join": {
 				MarkdownDescription: "If true, new employees automatically join this space. Defaults to `false`",
@@ -224,5 +228,5 @@ func (r spaceResource) Delete(ctx context.Context, req tfsdk.DeleteResourceReque
 }
 
 func (r spaceResource) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("space_id"), req, resp)
 }
